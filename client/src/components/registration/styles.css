@@ -1,0 +1,78 @@
+/*-------General-------*/
+.Page {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+.Background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.Forum {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px 30px 10px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1;
+}
+
+.Link{
+    padding-top: 10px;
+}
+
+.btn{
+    width: 100%;
+}
+
+.form-label{
+    margin-bottom: 0;
+}
+
+.Checkbox{
+    margin-bottom: 12px;
+}
+/*-------Login-------*/
+
+.LoginButton{
+    border-color: #486c35
+}
+
+.LoginButton:hover {
+    color: #212a14;
+    background-color: rgba(166,196,156,0.9);
+    border-color: #486c35
+}
+.fa-eye{
+    padding-left: 6px;
+    font-size: 13px;
+}
+.Checkbox{
+    display: flex;
+    position: relative;
+    align-items: center;
+    padding-bottom: 10px;
+}
+
+/*-------Signup-------*/
+
+.SignupButton{
+    border-color: #543f70
+}
+
+.SignupButton:hover {
+    color: #1e152a;
+    background-color: rgba(174, 163, 203, 0.9);
+    border-color: #543f70
+}
+
+
