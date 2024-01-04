@@ -1,0 +1,126 @@
+.HeaderLanding{
+    padding: 100px 0 65px 0;
+    font-size: 60px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+}
+.LandingBody{
+    background-color: #f1f1f1;
+}
+
+.Subheading{
+    padding-bottom: 30px;
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
+    color: #626262;
+}
+
+.SignupButtonLanding{
+    margin-top: 45px;
+    width: 350px;
+    height: 50px;
+    border-color: #543f70;
+    border-radius: 12px;
+    background-color: transparent;
+    margin-bottom: 80px;
+    color: black;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Subtle box shadow */
+    transition: all 0.3s ease;
+}
+
+.SignupButtonLanding:hover {
+    background-color: rgba(174, 163, 203, 0.9);
+    border-color: #543f70;
+    color: black;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
+
+}
+
+.leftSideLanding{
+    padding-left: 65px;
+}
+
+.Family{
+    margin-left: 0;
+    height: 425px
+}
+
+.rightSideLanding{
+    padding-left: 0px;
+    padding-top: 35px;
+}
+
+.download-buttons {
+    display: flex;
+    gap: 10px; /* Adjust the space between buttons */
+    padding-bottom: 40px;
+}
+
+.download-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    width: 180px;
+    border: none;
+    border-radius: 12px; /* Rounded corners */
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Subtle box shadow */
+    transition: all 0.3s ease;
+}
+
+.download-btn.ios {
+    color: black;
+    background-color: rgba(249, 255, 241, 0.9);
+}
+
+.download-btn.android {
+    color: black;
+    background-color: #faf6ff;
+}
+
+.download-btn.android:hover {
+    background-color: #efe6ff;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4); /* Slightly larger shadow on hover */
+}
+
+.download-btn.ios:hover {
+    background-color: rgba(249, 255, 233, 0.9);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4); /* Slightly larger shadow on hover */
+}
+
+/* Styling for the paragraph */
+.SubheadingDownload {
+    color: #d3d3d3; /* Light grey color */
+    font-size: 16px; /* Adjust as needed */
+    margin-bottom: 10px; /* Space between the paragraph and the header */
+}
+
+.HeaderDownload{
+    padding-bottom: 45px;
+}
+
+/* Styling for the header */
+
+.DownloadContainer{
+    padding-top: 75px;
+    text-align: center;
+}
+
+.NumbersContainer{
+    padding-top: 75px;
+    margin-bottom: 105px;
+    text-align: center;
+    width: 100%;
+    height: 350px;
+}
+.NumbersHeader{
+    padding-bottom: 65px;
+    font-size: 50px;
+}
+
+.NumbersSubHeader{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.Numbers{
+    color: #8c8c8c;
+}

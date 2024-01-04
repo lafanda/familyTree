@@ -35,7 +35,6 @@ app.post('/signup', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-
     try {
         const userInfo = await User.findOne({ email });
         if (!userInfo) {
@@ -48,7 +47,7 @@ app.post('/login', async (req, res) => {
         const token = jwt.sign({ userId: userInfo._id }, secret, {
             expiresIn: '365d'
         });
-        res.json({ token });
+        res.json({ token,userId: userInfo._id });
 
     } catch (err) {
         console.error(err);

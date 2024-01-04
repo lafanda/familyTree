@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import './styles.css'
+import './RegistrationStyles.css'
 import axios from 'axios';
 
 

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import './styles.css'
+import { useNavigate,useLocation } from 'react-router-dom'; // Import useNavigate
+import './RegistrationStyles.css'
 import axios from 'axios'
 
 function showPassword (){
@@ -13,6 +14,8 @@ function showPassword (){
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate(); // Create navigate function
+    const location = useLocation();
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -22,10 +25,18 @@ function Login() {
                 password: password
             });
 
+            // Inside your login component's handleSubmit function
             if (response.status === 200) {
                 localStorage.setItem('token', response.data.token);
-                alert("log in success")
-            } else {
+                localStorage.setItem('userId', response.data.userId);
+
+                // Redirect user to the previously attempted URL or to the portal
+                const locationState = location.state;
+                const redirectTo = locationState?.from?.pathname || `/portal/${response.data.userId}`;
+                navigate(redirectTo);
+            }
+
+            else {
                 const errorResponse = await response.json();
                 alert(errorResponse.message);
             }
