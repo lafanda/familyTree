@@ -2,3 +2,7 @@
     border-style: none;
     font-size: 45px;
 }
+
+.TreeButton{
+    display: flex;
+}

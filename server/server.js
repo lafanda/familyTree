@@ -4,12 +4,14 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 
+
 const app = express()
 app.use(express.json())
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 
 
 const User = require('./models/user')
+const Tree = require ('./models/tree')
 
 const uri = 'mongodb+srv://yazanmmh:Lafanda2004@cluster0.rap661n.mongodb.net/?retryWrites=true&w=majority'
 const salt = bcrypt.genSaltSync(10)
@@ -55,6 +57,30 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.post("/portal", async (req,res) =>{
+    const { familyName, id } = req.body;
+
+    try{
+        const admins = await User.findById(id)
+        const roots = []
+        const users = []
+        const newTree = await Tree.create({
+            familyName,
+            roots,
+            admins,
+            users,
+        })
+        res.json(newTree)
+    } catch(err){
+        console.log(err);
+    }
+})
+
+app.get('/portal', async (req, res) =>{
+    res.json(await Tree.find().sort({createdAt: 1}))
+})
+
 app.listen(4000, function () {
     console.log("running");
 })
+

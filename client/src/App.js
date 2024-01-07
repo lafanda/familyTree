@@ -15,6 +15,7 @@ function App() {
                     <Route path={"/login"} element={<Login/>}/>
                     <Route path={"/signup"} element={<Signup/>}/>
                     <Route path="/portal/:userId" element={<ProtectedRoute><Portal/></ProtectedRoute>} />
+                    <Route path="/portal/:userId/:" element={<ProtectedRoute><Portal/></ProtectedRoute>} />
                 </Routes>
             </Layout>
         </Router>

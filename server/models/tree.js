@@ -1,12 +1,15 @@
-const mongoose = require("mongoose")
-const {Schema, model} = mongoose;
+const mongoose = require("mongoose");
+const { Schema, model } = mongoose;
 
-const familySchema = new Schema({
-    user: {type: String, required: true},
-    members: {type: String, required: true}
-})
+const Member = require('./member'); // Update with correct path
+const User = require('./user'); // Update with correct path
 
-const familyModel = model('Tree', familySchema);
+const treeSchema = new Schema({
+    familyName: { type: String, required: true },
+    roots: [{ type: Schema.Types.ObjectId, ref: 'Member' }],
+    admins: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    users: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+});
 
-module.exports = familyModel
-
+const Tree = model('Tree', treeSchema);
+module.exports = Tree;
