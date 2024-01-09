@@ -12,30 +12,25 @@ function Portal() {
     useEffect(() => {
         const fetchTrees = async () => {
             try {
-                const tree = await axios.get('http://localhost:4000/portal');
+                const tree = await axios.get(`http://localhost:4000/portal?userId=${userId}`);
                 setTrees(tree.data); // Use response.data to get the actual trees array
             } catch (error) {
                 console.error('Error fetching trees', error);
-                // Handle error appropriately
             }
         };
-
         fetchTrees();
-    }, []);
+    }, [userId]);
     async function handleSubmit(ev) {
         ev.preventDefault()
         try {
-            const response = await axios.post("http://localhost:4000/portal", {
+            await axios.post("http://localhost:4000/portal", {
                 familyName: name,
                 id: userId,
             });
-            if (response === 200) {
-                alert('success');
-            }
         } catch (err) {
             alert(err)
         }
-
+        window.location.reload();
     }
 
 

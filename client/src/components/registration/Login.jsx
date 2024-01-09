@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { useNavigate,useLocation } from 'react-router-dom'; // Import useNavigate
 import './RegistrationStyles.css'
 import axios from 'axios'
+import {UserContext} from "./Context";
+
 
 function showPassword (){
     var status = document.getElementById("toggleID");
@@ -16,6 +18,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate(); // Create navigate function
     const location = useLocation();
+    const { setUserInfo } = useContext(UserContext);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -27,6 +30,7 @@ function Login() {
 
             // Inside your login component's handleSubmit function
             if (response.status === 200) {
+                setUserInfo(response.data);
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('userId', response.data.userId);
 

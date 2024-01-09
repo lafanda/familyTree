@@ -49,7 +49,7 @@ app.post('/login', async (req, res) => {
         const token = jwt.sign({ userId: userInfo._id }, secret, {
             expiresIn: '365d'
         });
-        res.json({ token,userId: userInfo._id });
+        res.json({ token,userId: userInfo._id, email });
 
     } catch (err) {
         console.error(err);
@@ -76,8 +76,32 @@ app.post("/portal", async (req,res) =>{
     }
 })
 
+// Assuming Express and your Tree model are already imported
+
 app.get('/portal', async (req, res) =>{
-    res.json(await Tree.find().sort({createdAt: 1}))
+    try {
+        const userId = req.query.userId; // Get the user ID from query parameter
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+
+        const trees = await Tree.find({ admins: userId }).sort({ createdAt: 1 });
+
+        if (trees.length === 0) {
+            return res.status(404).json({ message: "No trees found for this user" });
+        }
+
+        res.json(trees);
+    } catch (error) {
+        console.error('Error fetching trees', error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+
+app.get('/profile',(req,res) =>{
+    const token = localStorage.getItem('token');
+    res.json({token});
 })
 
 app.listen(4000, function () {
