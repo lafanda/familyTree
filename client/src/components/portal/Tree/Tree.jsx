@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import './TreeStyles.css'
 import axios from 'axios';
-import TreePortal from "../TreePortal";
-function Tree() {
+import {Tree} from "react-d3-tree";
+
+function TreeComponent() {
     const queryParameters = new URLSearchParams(window.location.search)
     const id = queryParameters.get('id')
     const [childId, setChildId] = useState("")
@@ -12,28 +13,33 @@ function Tree() {
     const [birthday, setBirthday] = useState("");
     const [deathday, setDeathday] = useState("");
     const [deceased, setDeceased] = useState(false);
-    const [roots, setRoots] = useState([])
+    const [root, setRoot] = useState()
+    const [treeData, setTreeData] = useState(null);
 
 
     const toggleFormVisibility = () => {
         setRootVisable(true);
     };
 
-    function toggleChildVisibility(childsId){
+    function toggleChildVisibility(childsId) {
         setChildId(childsId);
         setChildVisable(true);
     };
 
     useEffect(() => {
-        const fetchRoots = async () => {
+        const fetchCompleteTree = async () => {
             try {
-                const root = await axios.get(`http://localhost:4000/member?treeId=${id}`);
-                setRoots(root.data);
+                const response = await axios.get(`http://localhost:4000/member/${id}`);
+                setTreeData(response.data);
+
             } catch (error) {
-                console.error('Error fetching trees', error);
+                console.error('Error fetching complete tree', error);
             }
         };
-        fetchRoots();
+
+        if (id) {
+            fetchCompleteTree();
+        }
     }, [id]);
 
     async function handleSubmit(event) {
@@ -65,7 +71,7 @@ function Tree() {
         setDeceased(event.target.checked);
     };
 
-    async function handleChild(ev){
+    async function handleChild(ev) {
         ev.preventDefault();
         try {
             alert(childId);
@@ -89,24 +95,15 @@ function Tree() {
 
     }
 
+
+
+
     return (
         <div className={"Tree"}>
-            <div >
-                <button onClick={toggleFormVisibility}>Add Root Member</button>
-                {rootVisable && (
-                    <form onSubmit={handleSubmit}>
-                        <input type="text" placeholder="Name" value={name} onChange={ev => setName(ev.target.value)}/>
-                        <input type="checkbox" checked={deceased} onChange={handleCheckboxChange}/>
-                        <input type="text" placeholder="Birthday" value={birthday}
-                               onChange={ev => setBirthday(ev.target.value)}/>
-                        <input type="text" placeholder="DeathDay" value={deathday}
-                               onChange={ev => setDeathday(ev.target.value)}/>
-                        <button type="submit">Submit</button>
-                    </form>
-                )}
-                {roots.length > 0 && roots.map(root => (
-                    <p  onClick={() => toggleChildVisibility(root)}>{root}</p>
-                ))}
+            <div>
+
+
+                {treeData && (<Tree data={treeData} onClick={toggleFormVisibility}/>)}
 
                 {childVisable && (
                     <form onSubmit={handleChild}>
@@ -124,4 +121,4 @@ function Tree() {
     );
 }
 
-export default Tree;
+export default TreeComponent;

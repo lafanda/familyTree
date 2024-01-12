@@ -128,29 +128,29 @@ app.post('/member', async (req, res) => {
     }
 });
 
-app.get('/member', async (req, res) => {
-    try {
-        const treeId = req.query.treeId;
-        if (!treeId) {
-            return res.status(400).json({message: "User ID is required"});
-        }
-
-        const members = await Tree.findById(treeId).select('roots').sort({ createdAt: 1 });
-
-        if (members.length === 0) {
-            return res.status(404).json({message: "No roots found for this user"});
-        }
-
-        res.json(members.roots);
-    } catch (error) {
-        console.error('Error fetching trees', error);
-        res.status(500).json({message: "Internal Server Error"});
-    }
-});
+// app.get('/member', async (req, res) => {
+//     console.log("test2")
+//     try {
+//         const treeId = req.query.treeId;
+//         if (!treeId) {
+//             return res.status(400).json({message: "User ID is required"});
+//         }
+//
+//         const members = await Tree.findById(treeId).select('roots').sort({ createdAt: 1 });
+//
+//         if (members.length === 0) {
+//             return res.status(404).json({message: "No roots found for this user"});
+//         }
+//
+//         res.json(members.roots);
+//     } catch (error) {
+//         console.error('Error fetching trees', error);
+//         res.status(500).json({message: "Internal Server Error"});
+//     }
+// });
 
 app.post("/member/child", async (req, res) =>{
     const {memberId, name, attributes, children} = req.body
-    console.log(memberId);
 
     try{
         const newChild = await Member.create({ name, attributes, children });
@@ -164,25 +164,44 @@ app.post("/member/child", async (req, res) =>{
     }
 })
 
-app.get('/member/child', async (req,res)=>{
-    try {
-        const treeId = req.query.treeId;
-        if (!treeId) {
-            return res.status(400).json({message: "User ID is required"});
-        }
 
-        const members = await Tree.findById(treeId).select('roots').sort({ createdAt: 1 });
-
-        if (members.length === 0) {
-            return res.status(404).json({message: "No roots found for this user"});
-        }
-
-        res.json(members.roots);
-    } catch (error) {
-        console.error('Error fetching trees', error);
-        res.status(500).json({message: "Internal Server Error"});
+async function fetchMemberTree(memberId) {
+    const member = await Member.findById(memberId);
+    if (!member || member.children.length === 0) {
+        return {
+            name: member.name,
+            attributes: member.attributes,
+            children: []
+        };
     }
-})
+
+    const children = await Promise.all(
+        member.children.map(childId => fetchMemberTree(childId))
+    );
+
+    return {
+        name: member.name,
+        attributes: member.attributes,
+        children: children
+    };
+}
+
+
+app.get('/member/:id', async (req, res) => {
+    try {
+        const treeId = req.params.id;
+
+         const tree = await Tree.findById(treeId)
+
+        const treeData = await fetchMemberTree(tree.roots[0]);
+        res.json(treeData);
+    } catch (error) {
+        console.error('Error fetching tree:', error);
+        res.status(500).send('Error fetching tree data');
+    }
+});
+
+
 
 app.listen(4000, function () {
     console.log("running");
