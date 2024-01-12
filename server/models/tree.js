@@ -5,7 +5,7 @@ const Member = require('./member'); // Update with correct path
 const User = require('./user'); // Update with correct path
 
 const treeSchema = new Schema({
-    familyName: { type: String, required: true },
+    familyName: { type: String, required: true},
     roots: [{ type: Schema.Types.ObjectId, ref: 'Member' }],
     admins: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     users: [{ type: Schema.Types.ObjectId, ref: 'User' }]

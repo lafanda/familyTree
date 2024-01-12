@@ -23,14 +23,17 @@ function Portal() {
     async function handleSubmit(ev) {
         ev.preventDefault()
         try {
-            await axios.post("http://localhost:4000/portal", {
+           const response =  await axios.post("http://localhost:4000/portal", {
                 familyName: name,
                 id: userId,
             });
+            if(response.status === 200){
+                window.location.reload();
+            }
         } catch (err) {
             alert(err)
         }
-        window.location.reload();
+
     }
 
 
