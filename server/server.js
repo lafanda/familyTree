@@ -151,7 +151,6 @@ app.post('/member', async (req, res) => {
 
 app.post("/member/child", async (req, res) =>{
     const {memberId, name, attributes, children} = req.body
-
     try{
         const newChild = await Member.create({ name, attributes, children });
 
@@ -169,6 +168,7 @@ async function fetchMemberTree(memberId) {
     const member = await Member.findById(memberId);
     if (!member || member.children.length === 0) {
         return {
+            id:memberId,
             name: member.name,
             attributes: member.attributes,
             children: []
@@ -180,6 +180,7 @@ async function fetchMemberTree(memberId) {
     );
 
     return {
+        id:memberId,
         name: member.name,
         attributes: member.attributes,
         children: children
@@ -194,6 +195,7 @@ app.get('/member/:id', async (req, res) => {
          const tree = await Tree.findById(treeId)
 
         const treeData = await fetchMemberTree(tree.roots[0]);
+         console.log(treeData)
         res.json(treeData);
     } catch (error) {
         console.error('Error fetching tree:', error);

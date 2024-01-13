@@ -5,6 +5,7 @@
     font-weight: bold;
 }
 .LandingBody{
+    padding: 0 45px;
     background-color: #f1f1f1;
 }
 
@@ -36,17 +37,11 @@
 
 }
 
-.leftSideLanding{
-    padding-left: 65px;
-}
-
 .Family{
-    margin-left: 0;
-    height: 425px
+    height: 55vh
 }
 
 .rightSideLanding{
-    padding-left: 0px;
     padding-top: 35px;
 }
 

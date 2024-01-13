@@ -4,7 +4,7 @@ function Landing(){
 
         return (
             <section>
-                <div className={"conatiner LandingBody"}>
+                <div className={"container-fluid LandingBody"}>
                     <div className={"row"}>
                         <div className={"col-md-6 leftSideLanding"}>
                             <h1 className={"HeaderLanding"}>Simple and Intuitive</h1>

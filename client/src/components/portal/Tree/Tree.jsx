@@ -8,23 +8,13 @@ function TreeComponent() {
     const id = queryParameters.get('id')
     const [childId, setChildId] = useState("")
     const [rootVisable, setRootVisable] = useState(false);
-    const [childVisable, setChildVisable] = useState(false);
     const [name, setName] = useState("");
     const [birthday, setBirthday] = useState("");
     const [deathday, setDeathday] = useState("");
     const [deceased, setDeceased] = useState(false);
-    const [root, setRoot] = useState()
     const [treeData, setTreeData] = useState(null);
 
 
-    const toggleFormVisibility = () => {
-        setRootVisable(true);
-    };
-
-    function toggleChildVisibility(childsId) {
-        setChildId(childsId);
-        setChildVisable(true);
-    };
 
     useEffect(() => {
         const fetchCompleteTree = async () => {
@@ -95,17 +85,20 @@ function TreeComponent() {
 
     }
 
+    const handleNodeClick = (nodeData) => {
+        setChildId(nodeData.data.id)
+        setRootVisable(true)
+    };
+
 
 
 
     return (
-        <div className={"Tree"}>
-            <div>
+        <div >
+            <div className={"Tree"}>
 
-
-                {treeData && (<Tree data={treeData} onClick={toggleFormVisibility}/>)}
-
-                {childVisable && (
+                {treeData && (<Tree data={treeData} onNodeClick={handleNodeClick}/>)}
+                {rootVisable && (
                     <form onSubmit={handleChild}>
                         <input type="text" placeholder="Name" value={name} onChange={ev => setName(ev.target.value)}/>
                         <input type="checkbox" checked={deceased} onChange={handleCheckboxChange}/>
@@ -116,6 +109,7 @@ function TreeComponent() {
                         <button type="submit">Submit</button>
                     </form>
                 )}
+
             </div>
         </div>
     );
