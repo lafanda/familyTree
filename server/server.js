@@ -101,19 +101,18 @@ app.get('/portal', async (req, res) => {
 
 
 app.post('/member', async (req, res) => {
-    const { treeId, name, attributes, children } = req.body;
+    const { treeId, name, attributes,parents } = req.body;
 
     if (!treeId || !name || attributes.deceased === undefined) {
         return res.status(400).json({ message: "Missing required fields" });
     }
 
     try {
-
-        const newMember = await Member.create({name, attributes, children})
+        const newMember = await Member.create({name, attributes, parents})
 
         // Add the member object to the tree's roots array
         const updatedTree = await Tree.findByIdAndUpdate(treeId,
-            { $push: { roots: newMember._id } },
+            { $push: { members: newMember } },
             { new: true, runValidators: true }
         );
 
@@ -128,40 +127,40 @@ app.post('/member', async (req, res) => {
     }
 });
 
-// app.get('/member', async (req, res) => {
-//     console.log("test2")
-//     try {
-//         const treeId = req.query.treeId;
-//         if (!treeId) {
-//             return res.status(400).json({message: "User ID is required"});
-//         }
+// app.post("/member/child", async (req, res) =>{
+//     const {treeId, name, attributes, parents} = req.body
+//     try{
+//         const newChild = await Member.create({ name, attributes, parents });
 //
-//         const members = await Tree.findById(treeId).select('roots').sort({ createdAt: 1 });
+//         const updatedTree = await Tree.findByIdAndUpdate(treeId,
+//             { $push: { members: newChild } },
+//             { new: true, runValidators: true }
+//         );
 //
-//         if (members.length === 0) {
-//             return res.status(404).json({message: "No roots found for this user"});
-//         }
-//
-//         res.json(members.roots);
-//     } catch (error) {
-//         console.error('Error fetching trees', error);
-//         res.status(500).json({message: "Internal Server Error"});
+//     } catch (e) {
+//         console.log(e)
 //     }
-// });
+// })
 
-app.post("/member/child", async (req, res) =>{
-    const {memberId, name, attributes, children} = req.body
-    try{
-        const newChild = await Member.create({ name, attributes, children });
+app.get('/member', async (req, res) => {
+    try {
+        const treeId = req.query.treeId;
+        if (!treeId) {
+            return res.status(400).json({message: "User ID is required"});
+        }
 
-        await Member.findByIdAndUpdate(memberId,
-            { $push: { children: newChild._id } },
-            { new: true, runValidators: true }
-        );
-    } catch (e) {
-        console.log(e)
+        const members = await Tree.findById(treeId).select('members').sort({ createdAt: 1 });
+
+        if (members.length === 0) {
+            return res.status(404).json({message: "No roots found for this user"});
+        }
+
+        res.json(members.members);
+    } catch (error) {
+        console.error('Error fetching trees', error);
+        res.status(500).json({message: "Internal Server Error"});
     }
-})
+});
 
 
 async function fetchMemberTree(memberId) {

@@ -8,7 +8,7 @@ const memberSchema = new Schema({
         birthday: {type: String, required: false},
         dayOfDeath: {type: String, required: false},
     },
-    children: [{ type: Schema.Types.ObjectId, ref: 'Member' }]
+    parents: []
 });
 
 

@@ -6,7 +6,6 @@ import {Tree} from "react-d3-tree";
 function TreeComponent() {
     const queryParameters = new URLSearchParams(window.location.search)
     const id = queryParameters.get('id')
-    const [childId, setChildId] = useState("")
     const [rootVisable, setRootVisable] = useState(false);
     const [name, setName] = useState("");
     const [birthday, setBirthday] = useState("");
@@ -19,7 +18,7 @@ function TreeComponent() {
     useEffect(() => {
         const fetchCompleteTree = async () => {
             try {
-                const response = await axios.get(`http://localhost:4000/member/${id}`);
+                const response = await axios.get(`http://localhost:4000/member`);
                 setTreeData(response.data);
 
             } catch (error) {
@@ -32,8 +31,13 @@ function TreeComponent() {
         }
     }, [id]);
 
-    async function handleSubmit(event) {
-        event.preventDefault();
+
+    const handleCheckboxChange = (event) => {
+        setDeceased(event.target.checked);
+    };
+
+    async function hanldeSubmit(ev) {
+        ev.preventDefault();
         try {
             const response = await axios.post('http://localhost:4000/member', {
                 treeId: id,
@@ -43,37 +47,7 @@ function TreeComponent() {
                     birthday: birthday,
                     dayOfDeath: deathday,
                 },
-                children: []
-            });
-            if (response.status === 201) {
-                // Handle success logic here
-                setRootVisable(false);
-                window.location.reload();
-            }
-        } catch (err) {
-            // Improved error handling
-            alert(`Error: ${err.response?.data.message || 'An unknown error occurred'}`);
-        }
-    };
-
-
-    const handleCheckboxChange = (event) => {
-        setDeceased(event.target.checked);
-    };
-
-    async function handleChild(ev) {
-        ev.preventDefault();
-        try {
-            alert(childId);
-            const response = await axios.post('http://localhost:4000/member/child', {
-                memberId: childId,
-                name: name,
-                attributes: {
-                    deceased: deceased,
-                    birthday: birthday,
-                    dayOfDeath: deathday,
-                },
-                children: []
+                parents: []
             });
             if (response.status === 201) {
                 setRootVisable(false);
@@ -85,11 +59,9 @@ function TreeComponent() {
 
     }
 
-    const handleNodeClick = (nodeData) => {
-        setChildId(nodeData.data.id)
+    function  handleNodeClick() {
         setRootVisable(true)
-    };
-
+    }
 
 
 
@@ -97,9 +69,9 @@ function TreeComponent() {
         <div >
             <div className={"Tree"}>
 
-                {treeData && (<Tree data={treeData} onNodeClick={handleNodeClick}/>)}
+                <button onClick={handleNodeClick}>Add Root Member</button>
                 {rootVisable && (
-                    <form onSubmit={handleChild}>
+                    <form onSubmit={hanldeSubmit}>
                         <input type="text" placeholder="Name" value={name} onChange={ev => setName(ev.target.value)}/>
                         <input type="checkbox" checked={deceased} onChange={handleCheckboxChange}/>
                         <input type="text" placeholder="Birthday" value={birthday}
