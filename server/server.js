@@ -102,6 +102,7 @@ app.get('/portal', async (req, res) => {
 
 app.post('/member', async (req, res) => {
     const { treeId, name, attributes, children } = req.body;
+    console.log(treeId)
 
     if (!treeId || !name || attributes.deceased === undefined) {
         return res.status(400).json({ message: "Missing required fields" });
@@ -128,26 +129,6 @@ app.post('/member', async (req, res) => {
     }
 });
 
-// app.get('/member', async (req, res) => {
-//     console.log("test2")
-//     try {
-//         const treeId = req.query.treeId;
-//         if (!treeId) {
-//             return res.status(400).json({message: "User ID is required"});
-//         }
-//
-//         const members = await Tree.findById(treeId).select('roots').sort({ createdAt: 1 });
-//
-//         if (members.length === 0) {
-//             return res.status(404).json({message: "No roots found for this user"});
-//         }
-//
-//         res.json(members.roots);
-//     } catch (error) {
-//         console.error('Error fetching trees', error);
-//         res.status(500).json({message: "Internal Server Error"});
-//     }
-// });
 
 app.post("/member/child", async (req, res) =>{
     const {memberId, name, attributes, children} = req.body
@@ -194,8 +175,7 @@ app.get('/member/:id', async (req, res) => {
 
          const tree = await Tree.findById(treeId)
 
-        const treeData = await fetchMemberTree(tree.roots[0]);
-         console.log(treeData)
+        const treeData = await fetchMemberTree(tree.roots);
         res.json(treeData);
     } catch (error) {
         console.error('Error fetching tree:', error);

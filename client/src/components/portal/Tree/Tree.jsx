@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './TreeStyles.css'
 import axios from 'axios';
+import Node from "./Node";
 import {Tree} from "react-d3-tree";
 
 function TreeComponent() {
@@ -16,21 +17,7 @@ function TreeComponent() {
 
 
 
-    useEffect(() => {
-        const fetchCompleteTree = async () => {
-            try {
-                const response = await axios.get(`http://localhost:4000/member/${id}`);
-                setTreeData(response.data);
 
-            } catch (error) {
-                console.error('Error fetching complete tree', error);
-            }
-        };
-
-        if (id) {
-            fetchCompleteTree();
-        }
-    }, [id]);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -90,6 +77,21 @@ function TreeComponent() {
         setRootVisable(true)
     };
 
+    useEffect(() => {
+        const fetchCompleteTree = async () => {
+            try {
+                const response = await axios.get(`http://localhost:4000/member/${id}`);
+                setTreeData(response.data);
+
+            } catch (error) {
+                console.error('Error fetching complete tree', error);
+            }
+        };
+
+        if (id) {
+            fetchCompleteTree();
+        }
+    }, [id]);
 
 
 
@@ -97,7 +99,13 @@ function TreeComponent() {
         <div >
             <div className={"Tree"}>
 
-                {treeData && (<Tree data={treeData} onNodeClick={handleNodeClick}/>)}
+                {treeData && (     <Tree data={treeData}
+                                         renderCustomNodeElement={rd3tProps =>
+
+                                             <Node {...rd3tProps} />
+                                         }
+                                         onNodeClick={handleNodeClick}
+                />)}
                 {rootVisable && (
                     <form onSubmit={handleChild}>
                         <input type="text" placeholder="Name" value={name} onChange={ev => setName(ev.target.value)}/>

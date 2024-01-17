@@ -1,13 +1,24 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-function Node() {
+const Node = ({ nodeData }) => {
+    const [showAttributes, setShowAttributes] = useState(false);
 
+    const toggleAttributes = () => {
+        setShowAttributes(!showAttributes);
+    };
 
     return (
-        <div >
+        <g>
+            <circle onClick={toggleAttributes} r={10} fill="#888" />
 
-        </div>
+            {showAttributes && (
+                <text x={20} dy={25}>
+                  bingus
+                </text>
+            )}
+            {/* Add other attributes here */}
+        </g>
     );
-}
+};
 
 export default Node;
